@@ -38,31 +38,20 @@ transformer.set_mean('data',np.load(mean_file).mean(1).mean(1))
 transformer.set_raw_scale('data',255)
 # RGB -> BGR 转换
 transformer.set_channel_swap('data',(2,1,0))
-<<<<<<< HEAD
 '''
-=======
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 # 设置输入图像大小
 net.blobs['data'].reshape(50,        # batch 大小
                           3,         # 3-channel (BGR) images
                           227, 227)  # 图像大小为:227x227
-<<<<<<< HEAD
 '''
-=======
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 # 加载imagenet标签
 labels_file = caffe_root + 'data/ilsvrc12/synset_words.txt'
 labels = np.loadtxt(labels_file,str,delimiter='\t')
 # 加载图片
 features = []
 photo_names = []
-<<<<<<< HEAD
 #dir_path = '/home/silence/proj/photos'  #训练
 dir_path = '/home/silence/proj/photos_test'  #测试
-=======
-dir_path = '/home/silence/proj/photos_demo'  #训练
-#dir_path = '/home/silence/proj/photos_test_demo'  #测试
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 photo_list = os.listdir(dir_path)
 for photo in sorted(photo_list):
     im = caffe.io.load_image(dir_path+'/'+photo)
@@ -78,11 +67,7 @@ for photo in sorted(photo_list):
 save_path = '/home/silence/proj/'
 features = np.array(features)
 ### 训练
-<<<<<<< HEAD
 '''
-=======
-
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 # PCA
 pca = PCA(n_components=512)
 features_pca = pca.fit_transform(features) #用训练图片来训练PCA模型，同时返回降维后的数据
@@ -92,15 +77,9 @@ file_names = open(save_path+'photonames.pkl','wb')
 pickle.dump(pca,pca_model)
 pickle.dump(features_pca,file_features)
 pickle.dump(photo_names,file_names)
-<<<<<<< HEAD
 '''
 ### 测试
 
-=======
-
-### 测试
-'''
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 pca_model = open(save_path+'pca_model.pkl','rb')
 pca = pickle.load(pca_model)
 features_pca = pca.transform(features) #当模型训练好后，对于新输入的数据，用transform方法来降维
@@ -108,11 +87,7 @@ file_features = open(save_path+'test_features.pkl','wb')  #测试
 file_names = open(save_path+'test_photonames.pkl','wb')
 pickle.dump(features_pca,file_features)
 pickle.dump(photo_names,file_names)
-<<<<<<< HEAD
 
-=======
-'''
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 
 
 

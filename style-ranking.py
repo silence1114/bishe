@@ -7,7 +7,6 @@ def compute_similarity(luminance_data,mu_data,cov_data,luminance_ref,mu_ref,cov_
     lambda_l = 0.005
     lambda_c = 0.05
     # 求亮度特征之间的欧氏距离
-<<<<<<< HEAD
     de = np.linalg.norm(luminance_data - luminance_ref) 
     # 异常处理（有些图片只有单通道引起程序异常，忽略它们
     try: 
@@ -16,9 +15,6 @@ def compute_similarity(luminance_data,mu_data,cov_data,luminance_ref,mu_ref,cov_
         return 0
     if np.linalg.det((cov_data+cov_ref)/2)<0 or np.linalg.det(cov_data)<0:
         return 0   
-=======
-    de = np.linalg.norm(luminance_data - luminance_ref)    
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
     # 求色彩特征之间的Hellinger距离 (已经是平方形式
     tmp1 = np.power(np.linalg.det(cov_data),1/4)*np.power(np.linalg.det(cov_data),1/4)/np.power(np.linalg.det((cov_data+cov_ref)/2),1/2)
     tmp2 = (-1/8)*np.dot(np.dot((mu_data-mu_ref),((cov_data+cov_ref)/2)),np.transpose(mu_data-mu_ref))
@@ -87,10 +83,6 @@ if __name__ == '__main__':
             for k in range(len(c)):
                 scoring(i,j,c[k])
          
-<<<<<<< HEAD
-=======
-    print(score)
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
     ranking_file = open(save_path+'style-ranking.pkl', 'wb')
     pickle.dump(score,ranking_file)
 

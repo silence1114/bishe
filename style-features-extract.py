@@ -5,13 +5,8 @@ import pickle
 from skimage import io, color
 import matplotlib.pyplot as plt
 from multiprocessing import Pool,Manager,Process
-<<<<<<< HEAD
 dir_path = '/home/silence/proj/style_ref/' #风格图像
 #dir_path = '/home/silence/proj/photos/'   #内容图像
-=======
-#dir_path = '/home/silence/proj/style_ref_demo/' #风格图像
-dir_path = '/home/silence/proj/photos_demo/'   #内容图像
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
 save_path = '/home/silence/proj/'
 def extract_style_feature(image_index,filename,luminance_features,color_mu,color_cov):
     # 加载rgb图像
@@ -62,13 +57,8 @@ if __name__ == '__main__':
     # 存储图片名列表
     image_list = os.listdir(dir_path)
     image_list.sort()
-<<<<<<< HEAD
     image_names_file = open(save_path+'ref-imagenames.pkl', 'wb') #风格图像
     #image_names_file = open(save_path+'data-imagenames.pkl', 'wb') #内容图像
-=======
-    #image_names_file = open(save_path+'ref-imagenames.pkl', 'wb') #风格图像
-    image_names_file = open(save_path+'data-imagenames.pkl', 'wb') #内容图像
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
     pickle.dump(image_list,image_names_file)
     num_of_images = len(image_list)
     # 主进程与子进程共享这些list  
@@ -83,13 +73,8 @@ if __name__ == '__main__':
     p.close() #关闭进程池
     p.join() #等待开辟的所有进程执行完后，主进程才继续往下执行
     # 储存风格特征
-<<<<<<< HEAD
     style_features = open(save_path+'ref-style-features.pkl', 'wb') #风格图像
     #style_features = open(save_path+'data-style-features.pkl', 'wb') #内容图像
-=======
-    #style_features = open(save_path+'ref-style-features.pkl', 'wb') #风格图像
-    style_features = open(save_path+'data-style-features.pkl', 'wb') #内容图像
->>>>>>> 4a6a0ca894d0fb8c2565e23efda9333522487658
     pickle.dump({'luminance_features': list(luminance_features),
                  'color_mu': list(color_mu),
                  'color_cov':list(color_cov),}, style_features)## 注意，共享list不可直接dump，会报类型错误，必须先转换为普通list
