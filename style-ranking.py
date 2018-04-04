@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pickle
-save_path = '/home/silence/proj/'
+save_path = '/home/silence/test/'
 def compute_similarity(luminance_data,mu_data,cov_data,luminance_ref,mu_ref,cov_ref):
     # 调节参数
     lambda_l = 0.005
@@ -16,7 +16,7 @@ def compute_similarity(luminance_data,mu_data,cov_data,luminance_ref,mu_ref,cov_
     if np.linalg.det((cov_data+cov_ref)/2)<0 or np.linalg.det(cov_data)<0:
         return 0   
     # 求色彩特征之间的Hellinger距离 (已经是平方形式
-    tmp1 = np.power(np.linalg.det(cov_data),1/4)*np.power(np.linalg.det(cov_data),1/4)/np.power(np.linalg.det((cov_data+cov_ref)/2),1/2)
+    tmp1 = np.power(np.linalg.det(cov_data),1/4)*np.power(np.linalg.det(cov_ref),1/4)/np.power(np.linalg.det((cov_data+cov_ref)/2),1/2)
     tmp2 = (-1/8)*np.dot(np.dot((mu_data-mu_ref),((cov_data+cov_ref)/2)),np.transpose(mu_data-mu_ref))
     dh = 1 - (tmp1*np.exp(tmp2))
     # 计算相似度
@@ -33,8 +33,6 @@ def compute_similarity(luminance_data,mu_data,cov_data,luminance_ref,mu_ref,cov_
     ans = np.exp(-np.power(de, 2) / lambda_l) * np.exp(-np.power(dh, 2) / lambda_c)
     return np.max(ans)
     '''
-
-
 def scoring(i,j,k):
     similarity = compute_similarity(data_luminance[k],data_mu[k],data_cov[k],ref_luminance[j],ref_mu[j],ref_cov[j])
     
@@ -76,14 +74,28 @@ if __name__ == '__main__':
     cluster_index = pickle.load(cluster_index_file)
     num_of_clusters = len(cluster_index)
     score = np.zeros((num_of_clusters,num_of_ref))
+    # 载入风格聚类结果
+    file_index = open(save_path+'ref-index.pkl','rb')
+    ref_cluster_index = pickle.load(file_index)
+    num_of_ref_clusters = len(ref_cluster_index)
+    clustered_filenames = open(save_path+'ref-clusteredNames.pkl','rb')
+    ref_name_list = pickle.load(clustered_filenames)
     # 累积计分
     for i in range(num_of_clusters):
         c = cluster_index[i]
         for j in range(num_of_ref):
             for k in range(len(c)):
                 scoring(i,j,c[k])
-         
+
+    cluster_rank = np.zeros((num_of_clusters,num_of_ref_clusters))
+    for i in range(num_of_clusters):
+        for j in range(num_of_ref_clusters):
+            for k in range(len(ref_cluster_index[j])):
+                cluster_rank[i][j] = max(cluster_rank[i][j],score[i][ref_cluster_index[j][k]])
+        
     ranking_file = open(save_path+'style-ranking.pkl', 'wb')
     pickle.dump(score,ranking_file)
+    cluster_ranking_file = open(save_path+'style-cluster-ranking.pkl', 'wb')
+    pickle.dump(cluster_rank,cluster_ranking_file)
 
 
